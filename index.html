@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IRIS: Infrastructure-aware Multimodal Reasoning for Road Safety Auditing</title>
+  <meta name="description" content="IRIS uses video, motion sensors, GPS and Indian Roads Congress rules to support road safety audits.">
+  <link rel="icon" href="favicon.ico?v=3" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="static/favicon.svg?v=3">
+  <link rel="icon" type="image/png" sizes="32x32" href="static/favicon.png?v=3">
+  <link rel="apple-touch-icon" href="static/apple-touch-icon.png?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <h1>IRIS: Infrastructure-aware Multimodal Reasoning for Road Safety Auditing with Regulatory Compliance</h1>
+    <p class="venue">ICVGIP 2026</p>
+    <p class="buttons">
+      <span class="btn" title="Coming soon" aria-disabled="true"><i class="fa-solid fa-file-pdf"></i> Paper <small>soon</small></span>
+      <a class="btn" href="https://github.com/iris-roadsafety/IRIS"><i class="fa-brands fa-github"></i> Code</a>
+      <a class="btn" href="https://huggingface.co/datasets/VedulaAbhishek/IRIS"><i class="fa-solid fa-database"></i> Dataset</a>
+    </p>
+  </div>
+</header>
+
+<section class="band">
+  <div class="wrap">
+    <figure class="teaser">
+      <img src="static/images/iris_overview.png" alt="Overview: Indian road traffic, the road safety challenge, conventional road audits, and the proposed low-cost IRIS solution">
+    </figure>
+    <h2>From Road Challenges to Low-Cost Compliance Auditing</h2>
+    <p class="lead">Roads in India often have degraded surfaces, edge and boundary drops, and missing lane markings. We propose IRIS, a multimodal system that combines egocentric video, smartphone motion sensor (IMU) data, and GPS to collect visual, motion, and location evidence. IRIS links this evidence to the relevant Indian Roads Congress (IRC) clauses, so road safety can be checked, compliance can be verified, and audit reports can be produced. It is a low-cost and scalable way to assess road safety.</p>
+  </div>
+</section>
+
+<section class="band light">
+  <div class="wrap narrow">
+    <h2>Abstract</h2>
+    <p class="lead">We introduce IRIS, a multimodal framework for infrastructure-oriented road-safety auditing that combines synchronized egocentric video, inertial measurements, GPS, and a machine-readable Indian Roads Congress (IRC) knowledge graph. IRIS treats localized evasive events as complementary evidence, reasoning about their associated infrastructure conditions, locations, and compliance with applicable IRC requirements.</p>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Data collection</h2>
+    <p class="center">We use a low-cost mobile sensing platform on a two-wheeler during real road trips.</p>
+    <div class="cards three">
+      <div class="card stat">
+        <div class="big">30 FPS</div>
+        <h3>Forward-facing camera</h3>
+        <p>Egocentric video</p>
+      </div>
+      <div class="card stat">
+        <div class="big">200 Hz</div>
+        <h3>Smartphone IMU</h3>
+        <p>Acceleration and angular velocity on 3 axes</p>
+      </div>
+      <div class="card stat">
+        <div class="big">1 Hz</div>
+        <h3>Smartphone GPS</h3>
+        <p>Latitude, longitude, altitude and speed</p>
+      </div>
+    </div>
+    <p class="center">The recordings are on <a href="https://huggingface.co/datasets/VedulaAbhishek/IRIS">Hugging Face</a>.</p>
+  </div>
+</section>
+
+<section class="band light">
+  <div class="wrap">
+    <h2>Multimodal data</h2>
+    <figure>
+      <img src="static/images/multimodal_data.png" alt="For each evasive event type: front camera clip, acceleration, turning speed, and GPS path" loading="lazy">
+      <figcaption>Each row shows one example of a sudden evasive move, with the matching front camera video, acceleration, turning speed, and GPS path. Different moves leave different patterns in each of these signals, which shows how the road view, the bike's motion, and the location together give more evidence to understand what happened.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <h2>Baseline architecture: TAGNET for IRC-based road compliance reasoning</h2>
+    <figure>
+      <img src="static/images/tagnet_architecture.png" alt="TAGNET-V1 (a) and TAGNET-V2 (b) architecture diagrams" loading="lazy">
+    </figure>
+    <p class="lead">We propose TAGNET-V1 (figure (a)), a parameter-efficient multimodal architecture. It takes video, motion sensor (IMU) data, context from GPS, and the retrieved IRC clauses, and turns them all into one shared form that a language model can read. Small add-on modules (adapters) keep the structure of each input; a gate called Adaptive Modality Gating (AMG) decides how much weight to give the motion data and the context for each event, as shown in TAGNET-V2 (figure (b)). The combined input, made of the video tokens, the task prompt, and the IRC clauses, is turned into an answer in a fixed format, to check compliance with IRC:35-2015 and IRC:67-2022.</p>
+    <div class="table-wrap">
+      <table class="params">
+        <thead><tr><th>Model</th><th>Total parameters</th><th>Trainable parameters</th><th>Trainable share</th></tr></thead>
+        <tbody>
+          <tr><td>TAGNET-V1</td><td>3.758B</td><td>3.686M</td><td>0.0981%</td></tr>
+          <tr><td>TAGNET-V2</td><td>2.211B</td><td>2.179M</td><td>0.0986%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section class="band light">
+  <div class="wrap">
+    <h2>Qualitative comparison</h2>
+    <figure>
+      <img src="static/images/qualitative_comparison.png" alt="Side-by-side answers from Zero-Shot, Fine Tune, TAGNET V1 and TAGNET V2 for the same three events" loading="lazy">
+      <figcaption>A side-by-side look at how the models explain events and check them against the road rules. Models that have not been trained on our data often miss the real cause of the rider's move; TAGNET-V2 uses both the video and the motion signals to explain the sudden moves; and the IRC clauses give clause-by-clause support for the final compliance result.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="band" id="BibTeX">
+  <div class="wrap narrow">
+    <h2>BibTeX</h2>
+    <pre><code>@misc{iris,
+  title  = {{IRIS}: Infrastructure-aware Multimodal Reasoning for Road Safety Auditing with Regulatory Compliance},
+  year   = {2026},
+  url    = {https://huggingface.co/datasets/VedulaAbhishek/IRIS}
+}</code></pre>
+    <p class="note">The citation will be updated when the paper is published.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p>The recorded data is released under <a href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a> (non-commercial research use, with credit).</p>
+  </div>
+</footer>
+
+</body>
+</html>
